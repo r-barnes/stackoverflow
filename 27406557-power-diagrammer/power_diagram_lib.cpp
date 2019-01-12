@@ -16,12 +16,11 @@
 #include <memory>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel K;
-typedef CGAL::Regular_triangulation_filtered_traits_2<K>  Traits;
+typedef CGAL::Regular_triangulation_2<K> RT;
 
-typedef CGAL::Regular_triangulation_2<Traits> RT2;
-typedef CGAL::Regular_triangulation_adaptation_traits_2<RT2>         AT;
-typedef CGAL::Regular_triangulation_degeneracy_removal_policy_2<RT2> DRP;
-typedef CGAL::Voronoi_diagram_2<RT2, AT, DRP> VD;
+typedef CGAL::Regular_triangulation_adaptation_traits_2<RT>         AT;
+typedef CGAL::Regular_triangulation_degeneracy_removal_policy_2<RT> DRP;
+typedef CGAL::Voronoi_diagram_2<RT, AT, DRP> VD;
 
 int main(int argc, char **argv){
   if(argc!=2){
@@ -71,8 +70,8 @@ int main(int argc, char **argv){
   }
 
   //Read in points from the command line
-  RT2::Weighted_point wp;
-  std::vector<RT2::Weighted_point> wpoints;
+  RT::Weighted_point wp;
+  std::vector<RT::Weighted_point> wpoints;
   while((*fin)>>wp)
     wpoints.push_back(wp);
 
@@ -81,7 +80,7 @@ int main(int argc, char **argv){
     delete fin;
 
   //Create a Regular Triangulation from the points
-  RT2 rt(wpoints.begin(), wpoints.end());
+  RT rt(wpoints.begin(), wpoints.end());
   rt.is_valid();
 
   //Wrap the triangulation with a Voronoi diagram adaptor. This is necessary to
@@ -162,7 +161,7 @@ int main(int argc, char **argv){
     if(do_crop){
       //Find the bounding box of the points. This will be used to crop the Voronoi
       //diagram later.
-      const K::Iso_rectangle_2 bbox = CGAL::bounding_box(wpoints.begin(), wpoints.end());
+      const CGAL::Bbox_2 bbox = CGAL::bbox_2(wpoints.begin(), wpoints.end());
 
       //In order to crop the Voronoi diagram, we need to convert the bounding box
       //into a polygon. You'd think there'd be an easy way to do this. But there
