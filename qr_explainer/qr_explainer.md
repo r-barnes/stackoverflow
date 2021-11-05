@@ -15,7 +15,7 @@ We'll look at:
 
 **tl;dr To make a predictive model from some data.**
 
-Imagine that we have a set of data defined by $(x,y)$ values. These $(x,y)$ values make a scatterplot. We would like to developed a mathematical model of this data so that for _any_ $x$ value we can predict the corresponding $y$ value. You might say that we are searching for a function $f(x)$ that predicts $y$ well.
+Imagine that we have a set of data defined by $(x,y)$ values. These $(x,y)$ values make a scatterplot. We would like to develop a mathematical model of this data so that for _any_ $x$ value we can predict the corresponding $y$ value. You might say that we are searching for a function $f(x)$ that predicts $y$ well.
 
 Graphically, we want to go from this:
 
@@ -47,24 +47,24 @@ The offsets shown in (b) are the vertical offsets we'll be discussing at length 
 
 Today, we'll assume all of our $y$ have the same uncertainty and will find the best-fit line using **ordinary least squares**.
 
-Pedagogically, we'll also do this because the math has nice analytic forms and relative easy explanations. Much later, you'll forget that all these other options existed and spend the rest of your life developing sub-standard models, but that's another story.
+Pedagogically, we'll also do this because the math has nice analytic forms and relatively easy explanations. Much later, you'll forget that all these other options existed and spend the rest of your life developing sub-standard models, but that's another story.
 
 # Choosing An Error Function
 
-The foregoing means that for a given point $i$ with coordinates $(x,y)$ and a model $f(x)$ the error of that point with respect to the model is $e_i=g(f(x_i),y_i)$ where $g(\cdot)$ is some function. The total error is the sum of all of these errors: $\sum_i e_i$.
+The foregoing means that for a given point $i$ with coordinates $(x,y)$ and a model $f(x)$, the error of that point with respect to the model is $e_i=g(f(x_i),y_i)$ where $g(\cdot)$ is some function. The total error is the sum of all of these errors: $\sum_i e_i$.
 
 How can we choose an appropriate $g(\cdot)$?
 
-Since we're summing $g(\cdot)$ across many inputs, it's clear that it should always be positive, otherwise the error of one point would cancel another. So $g(\cdot)$ needs to map the range $(-\infty,\infty)$ to the range $[0, \infty)$. A couple of obvious functions that do this are the square function and the absolute value function. We will prefer the square function because:
+Since we're summing $g(\cdot)$ across many inputs, it's clear that $g(\cdot)$ should always be positive, otherwise the error of one point would cancel another. So $g(\cdot)$ needs to map the range $(-\infty,\infty)$ to the range $[0, \infty)$. A couple of obvious functions that do this are the square function and the absolute value function. We will prefer the square function because:
 
 * It has nice derivatives, allowing for easy mathematical analysis.
 * It implies that the uncertainties in the $y$ terms are normally distributed.
-* If we assume that our $y$ datapoints are independent and normal distributed, the least squares method using a squared error term is the result of [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation).
+* If we assume that our $y$ datapoints are independent and normally distributed, the least squares method using a squared error term is the result of [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation).
 * It penalizes points farther from the line more than points closer to the line, which has a certain karmic justice about it.
 
-So, for a point $(x,y)$ and a model $f(x)$ the error of that point with respect ot the model is $e_i=(f(x_i)-y_i)^2$. The total error is still $\sum_i e_i$.
+So, for a point $(x,y)$ and a model $f(x)$, the error of that point with respect to the model is $e_i=(f(x_i)-y_i)^2$. The total error is still $\sum_i e_i$.
 
-Regardless of which error we choose, if we search all possible combinations of values of `a` and `b` and choose the one with the smallest sum of errors, we call this the best-fitting model. It is the model that minimizes the squared error or, in other words, the least-squares fit.
+Regardless of which error we choose, if we search all possible combinations of values of `a` and `b` and choose the one with the smallest sum of errors, we call this the best-fitting model. It is the model that minimizes the squared error or, in other words, it is the least-squares fit.
 
 If we were using total least squares with perpendicular errors, examining all the models might look like this, except that we'd also have to search all the possible offsets of the line:
 
@@ -72,7 +72,7 @@ If we were using total least squares with perpendicular errors, examining all th
 
 # Heading for Higher Dimensions
 
-Now, for our $(x,y)$ points above $x$ might have represented the horsepower of a car while $y$ represented miles per gallon (MPG). But maybe horsepower alone might be a poor indicator of MPG, so we would like to use more data. Maybe using Horsepower, Weight, and Displacement together could give us a better model for predicting MPG.
+Now, for our $(x,y)$ points above, $x$ might have represented the horsepower of a car while $y$ represented miles per gallon (MPG). But maybe horsepower alone might be a poor indicator of MPG, so we would like to use more data. Maybe using Horsepower, Weight, and Displacement together could give us a better model for predicting MPG.
 
 ![Correlation plot of R's motorcar dataset](mtcars.png)
 
@@ -80,7 +80,7 @@ So, we make a matrix $X$. Each row of $X$ is some data we know about a car: it's
 
 If we want a simple model to predict MPG, our simplest model still looks like a line, $f(X) = X\beta+b$, except that $\beta$ and $b$ are vectors.
 
-Our error is still $f(X)-y=X\beta+b-y$. But note that we can simplify this equation! If we add a column of 1 to the left-hand side of $X$ and an additional entry to $\beta$, to get the vector $<\beta_\textrm{new}, \beta_1, \beta_2, \beta_3, \ldots>$ then $X\beta+b$ with this modified $X$ and new $\beta$ automagically includes the `+b` offset from $X\beta+b-y$. That is, we've made this change:
+Our error is still $f(X)-y=X\beta+b-y$. But note that we can simplify this equation! If we add a column of 1 to the left-hand side of $X$ and an additional entry to $\beta$, to get the vector $<\beta_\textrm{new}, \beta_1, \beta_2, \beta_3, \ldots>$ then $X\beta+b$ with this modified $X$ and new $\beta$ automatically includes the `+b` offset from $X\beta+b-y$. That is, we've made this change:
 $$
 \begin{bmatrix}
 X_{1,1} & X_{1,2} & X_{1,3} \\
@@ -107,6 +107,8 @@ Thus, we can write the error in a simpler form as $X\beta-y$. This returns a vec
 
 So how do we get $\beta$? Since everything in math is better if we're solving for $x$ let's rewrite our equation $X\beta-y$ above as $Ax-b$.
 
+#I have encountered the "2 norm" multiple times over the years, but it wasn't until you explained the QR algorithm to me that I heard it reffered to as the "2 norm"-- I would consider clarifying that this is the same thing as the "norm", and the notation implies the same thing as "|| x ||"
+#I was able to infer what you meant by "argmin_x" because of the coding work we've done, but someone without that background may be confused by this. I would consider specifying what you mean here (unless this is something your target audience would know, of course)
 Formally, the problem we wish to solve is
 $$
 \textrm{argmin}_x \lVert Ax-b \rVert_2
@@ -201,6 +203,7 @@ So, we now have a nice way of solving the least squares problem without taking a
 
 **Finding the QR-decomposition.** A QR-decomposition is any procedure that gives you a $QR$ for a matrix $A$. The textbook approach to this is the [Gram-Schmidt](https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process) algorithm. In practice, Gram-Schmidt is [not numerically stable](https://math.stackexchange.com/a/3957623/14493) enough so no computer software uses it. Instead, techniques like [Householder reflections](https://en.wikipedia.org/wiki/QR_decomposition#Using_Householder_reflections) are used.
 
+#inspired by my math teacher?
 **It is not the QR algorithm!** Folks who are sloppy with their language may refer to finding a QR-decomposition as "the QR algorithm". This is bad. The [actual QR algorithm](https://en.wikipedia.org/wiki/QR_algorithm) is used to find the eigenvalues of a matrix. Folks should say "Gram-Schmidt" algorithm instead.
 
 # The Gram-Schmidt Process
